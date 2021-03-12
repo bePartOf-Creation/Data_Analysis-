@@ -1,0 +1,218 @@
+---
+title: "DataAnalysis"
+author: "Ola_driod"
+date: "3/12/2021"
+output: html_document
+---
+
+```{r}
+#Load Data
+dt <- read.table("data_r/who_1.csv",header = T,sep = ",")
+head(dt)
+
+
+```
+
+```{r}
+#Load Data
+dt <- read.table("data_r/who_1.csv",header = F,sep = ",")
+dt[1:10,1:4]
+
+
+```
+
+
+
+```{r}
+#Load Data
+dt <- read.table("data_r/who_1.csv",header = F,sep = ",")
+names(dt) <- c("Cyl","Miles","Model","Fuel")
+dt[1:10,1:4]
+
+
+```
+
+
+
+```{r}
+#Load Data
+dt2 <- read.table("data_r/potatoes.txt",header = F,sep = "\t")
+dt2[1:10,1:4]
+```
+
+
+```{r}
+#Load Data
+dt3 <- read.csv2("data_r/who_2_semi.csv",header = TRUE)
+dt3[1:4, 1:4]
+
+```
+
+```{r}
+#Load Data
+dt3 <- read.table("data_r/who_2_semi.csv",header = TRUE,sep = ";")
+dt3[1:4, 1:4]
+
+
+```
+```{r}
+#Load Data
+who_4 <- read.delim("data_r/potatoes.txt",header=F)
+who_4[1:4, ]
+
+
+```
+
+
+```{r}
+sht1 <- read_excel("data_r/Employees.xlsx",sheet = 1)
+sht2 <- read_excel("data_r/Employees.xlsx", sheet = 2)
+sht1[1:4,1:4]
+
+```
+
+
+```{r} 
+host <- "courses.csrrinzqubik.us-east-1.rds.amazonaws.com"
+connect <- dbConnect(RMySQL:: MySQL(), dbname = "tweater", host = host, port = 3306, user = "student", password = "datacamp")
+## After importing the necessary library(DBI & RMySQL),then we can run this to make connect to the database....
+
+```
+
+```{r}
+#Load Data
+tables <- dbListTables(connect)
+tables
+## Helps To Show the Lists Of Tables In the database
+```
+```{r}
+#Load Data
+users <- dbReadTable(connect, "users")
+users
+## Reading a Table in the database
+```
+
+```{r}
+write.csv(users, file = "users.csv")
+##Making of a copy of a file from a existing file on the database
+```
+
+```{r}
+house <- read.csv("https://factual.ng/course/house.csv", header = T)
+house[1:4,1:4]
+##Making of a copy of a file from the Web
+
+```
+
+```{r}
+library(haven)
+birth <- read_sas("data_r/birth1.sas7bdat")
+birth[1:4,1:4]
+```
+
+```{r}
+library(haven)
+alcohol <- read_dta("data_r/alcohol.dta")
+alcohol[1:4, ]
+
+## this function can be used to read STATA Dtat files into R.
+```
+
+```{r}
+pers <- read_sav("data_r/personality.sav")
+pers[1:4, ]
+## this function can be used to SPSS data fIles inTo R
+```
+
+
+```{r}
+library(readxl)
+library(tidyverse)
+dta <- read_excel("data_r/mbta.xlsx", skip = 1,range = cell_cols(2:60))
+dta[1:4, ]
+
+```
+
+```{r}
+dta_1 <- dta%>% gather(`2007-01`:`2011-10`,key = "year", value = "passengers")
+dta_1[1:4, ]
+
+```
+```{r}
+dta_2 <- dta_1 %>% separate(year, into = c("year","month"))
+dta_2[1:4, ]
+## this function turns sinle character column  into multiple columns
+```
+
+```{r}
+data_3 <- dta_2 %>% spread(mode,passengers)
+data_3[1:4, ]
+```
+
+```{r}
+dta_4 <- data_3%>% .[,c(1:2,6:8)]
+dta_4[1:4]
+
+```
+
+```{r}
+dta_5 <- dta_4 %>% gather(`Commuter Rail`:`Light Rail`, key="rail_type",value = "passengers")
+dta_5[1:4,]
+
+```
+
+```{r}
+f1 <- filter(hflights, Year == 2011, Month == 2)
+f1[1:4,1:4]
+```
+
+```{r}
+f2 <- filter(hflights, Dest %in% c("BOS","LAS"))
+f2[1:4,1:4]
+```
+
+```{r}
+f3 <- filter(hflights, between(Distance, 224,994))
+f3[1:6,13:16]
+```
+
+```{r}
+dept <- filter(hflights, Year == 2011, Month == 4)
+dept[1:6, ]
+```
+
+```{r}
+operate <- filter(hflights, UniqueCarrier %in% c("AA","WN"))
+operate[1:4,]
+```
+
+```{r}
+arr <- arrange(hflights, Year, Month)
+arr[1:6,]
+```
+
+```{r}
+arr1 <- select(hflights, start_With = "DepDelay", ends_with = "ArrTime")
+arr1[1:6,]
+```
+
+```{r}
+m <- hflights %>% select(ends_with("Delay"), Distance, AirTime) %>%
+mutate(time_gain = ArrDelay - DepDelay,
+speed = Distance / AirTime * 60)
+m[1:4,1:6]
+## " %>%" means "then"
+```
+
+```{r}
+summarise(hflights, Delay = sum(DepDelay, na.rm = TRUE))
+```
+
+```{r}
+hflights %>% group_by(UniqueCarrier) %>%
+  summarise(DepDelay = n())
+```
+
+```{r}
+
+```
